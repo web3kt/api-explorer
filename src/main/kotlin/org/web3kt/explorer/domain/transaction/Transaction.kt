@@ -1,0 +1,47 @@
+package org.web3kt.explorer.domain.transaction
+
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
+import org.web3kt.explorer.domain.block.Block
+import org.web3kt.explorer.domain.internalTransaction.InternalTransaction
+import org.web3kt.explorer.domain.log.Log
+import java.math.BigInteger
+
+@Entity
+class Transaction(
+    @Id val id: String,
+    @ManyToOne val block: Block,
+    val contractAddress: String?,
+    val cumulativeGasUsed: BigInteger,
+    val from: String,
+    val gasUsed: BigInteger,
+    val effectiveGasPrice: BigInteger,
+    @Column(columnDefinition = "text") val logsBloom: String,
+    val status: String?,
+    val revertReason: String?,
+    val to: String,
+    val transactionIndex: BigInteger,
+    val type: String,
+    // val accessList: List<Access>? = null,
+    val chainId: BigInteger? = null,
+    val gas: BigInteger,
+    val gasPrice: BigInteger,
+    @Column(columnDefinition = "text") val input: String,
+    val maxFeePerGas: BigInteger? = null,
+    val maxPriorityFeePerGas: BigInteger? = null,
+    val nonce: BigInteger,
+    val r: String,
+    val s: String,
+    val v: String,
+    val value: BigInteger,
+    val yParity: String? = null,
+) {
+    @OneToMany(mappedBy = "transaction")
+    val logs: List<Log> = emptyList()
+
+    @OneToMany(mappedBy = "transaction")
+    val internalTransactions: List<InternalTransaction> = emptyList()
+}
