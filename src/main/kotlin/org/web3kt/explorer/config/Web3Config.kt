@@ -30,7 +30,7 @@ class Web3Config(
                 )
             }
             defaultRequest {
-                url(web3Properties.url)
+                url(web3Properties.rpcEndpoint)
             }
         }
 }
