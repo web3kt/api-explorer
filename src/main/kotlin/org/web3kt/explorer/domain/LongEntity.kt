@@ -1,4 +1,4 @@
-package org.web3kt.explorer
+package org.web3kt.explorer.domain
 
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType

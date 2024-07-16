@@ -4,7 +4,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import org.web3kt.core.protocol.serializer.Integer
-import org.web3kt.explorer.LongEntity
+import org.web3kt.explorer.domain.LongEntity
 import org.web3kt.explorer.domain.topic.Topic
 import org.web3kt.explorer.domain.transaction.Transaction
 

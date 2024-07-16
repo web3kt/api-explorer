@@ -2,7 +2,7 @@ package org.web3kt.explorer.domain.internalTransaction
 
 import jakarta.persistence.Entity
 import jakarta.persistence.ManyToOne
-import org.web3kt.explorer.LongEntity
+import org.web3kt.explorer.domain.LongEntity
 import org.web3kt.explorer.domain.transaction.Transaction
 import java.math.BigInteger
 
