@@ -7,9 +7,12 @@ import kotlinx.serialization.json.Json
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.web3kt.core.Web3
+import org.web3kt.explorer.config.propertise.Web3Properties
 
 @Configuration
-class Web3Config {
+class Web3Config(
+    private val web3Properties: Web3Properties,
+) {
     @Bean
     fun web3(): Web3 =
         Web3 {
@@ -27,7 +30,7 @@ class Web3Config {
                 )
             }
             defaultRequest {
-                url("https://testnet.directional.io")
+                url(web3Properties.url)
             }
         }
 }

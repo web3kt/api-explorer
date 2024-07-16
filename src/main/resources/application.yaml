@@ -23,3 +23,5 @@ spring:
     properties:
       org.quartz.jobStore.isClustered: true
       org.quartz.scheduler.instanceId: AUTO
+web3:
+  url: ${BESU_RPC_URL}
