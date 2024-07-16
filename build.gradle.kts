@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
+
 group = "org.web3kt"
 version = "0.0.1"
 
@@ -76,4 +78,24 @@ kotlin {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.withType<BootBuildImage> {
+    val registryUrl = "ghcr.io"
+    val projectName = "web3kt"
+    val username = System.getenv("USERNAME")
+    val password = System.getenv("PASSWORD")
+
+    val imageName = "$registryUrl/$projectName/${project.name}"
+    this.imageName.set(imageName)
+    this.tags.add("$imageName:${project.version}")
+    this.publish.set(true)
+
+    docker {
+        publishRegistry {
+            this.url.set(registryUrl)
+            this.username.set(username)
+            this.password.set(password)
+        }
+    }
 }
