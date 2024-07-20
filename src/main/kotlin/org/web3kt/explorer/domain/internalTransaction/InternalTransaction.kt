@@ -18,6 +18,7 @@ import java.math.BigInteger
 )
 class InternalTransaction(
     @ManyToOne val transaction: Transaction,
+    val timestamp: Long,
     val callType: String?,
     val from: String,
     val gas: BigInteger?,

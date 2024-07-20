@@ -1,7 +1,6 @@
 package org.web3kt.explorer.web.dto
 
 import org.web3kt.explorer.domain.transaction.Transaction
-import org.web3kt.explorer.web.dto.BlockResponse.Companion.toResponse
 import java.math.BigInteger
 
 /**
@@ -9,7 +8,8 @@ import java.math.BigInteger
  */
 data class TransactionResponse(
     val id: String,
-    val block: BlockResponse,
+    val blockId: BigInteger,
+    val timestamp: Long,
     val from: String,
     val to: String?,
     val status: String?,
@@ -22,7 +22,8 @@ data class TransactionResponse(
         fun Transaction.toResponse() =
             TransactionResponse(
                 id = id,
-                block = block.toResponse(),
+                blockId = block.id,
+                timestamp = timestamp,
                 from = from,
                 to = to,
                 status = status,

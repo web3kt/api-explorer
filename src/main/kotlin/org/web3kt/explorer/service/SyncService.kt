@@ -12,6 +12,8 @@ import org.web3kt.explorer.domain.internalTransaction.InternalTransaction
 import org.web3kt.explorer.domain.internalTransaction.InternalTransactionRepository
 import org.web3kt.explorer.domain.log.Log
 import org.web3kt.explorer.domain.log.LogRepository
+import org.web3kt.explorer.domain.tokenTransaction.TokenTransaction
+import org.web3kt.explorer.domain.tokenTransaction.TokenTransactionRepository
 import org.web3kt.explorer.domain.topic.Topic
 import org.web3kt.explorer.domain.topic.TopicRepository
 import org.web3kt.explorer.domain.transaction.Transaction
@@ -27,6 +29,7 @@ class SyncService(
     private val topicRepository: TopicRepository,
     private val logRepository: LogRepository,
     private val internalTransactionRepository: InternalTransactionRepository,
+    private val tokenTransactionRepository: TokenTransactionRepository,
 ) {
     fun nextBlockNumber(): BigInteger = (blockRepository.findFirstByOrderByIdDesc()?.id ?: (-1).toBigInteger()) + 1.toBigInteger()
 
@@ -73,9 +76,25 @@ class SyncService(
                     .map { topicRepository.findByValue(it) ?: topicRepository.save(Topic(it, null)) }
                     .associateBy { it.value }
 
-            logs
-                .map { it.toEntity(transactionMap[it.transactionHash]!!, it.topics.map { topicMap[it]!! }) }
-                .run { logRepository.saveAll(this) }
+            val tokenTransactionLogs =
+                logs
+                    .map { it.toEntity(transactionMap[it.transactionHash]!!, it.topics.map { topicMap[it]!! }) }
+                    .run { logRepository.saveAll(this) }
+                    .filter { it.topics.firstOrNull()?.value == "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef" }
+
+            // save token transactions
+            tokenTransactionLogs
+                .map {
+                    TokenTransaction(
+                        id = it.id!!,
+                        log = it,
+                        timestamp = it.timestamp,
+                        token = it.address,
+                        from = "0x" + it.topics[1].value.takeLast(40),
+                        to = "0x" + it.topics[2].value.takeLast(40),
+                        value = BigInteger(it.data.removePrefix("0x"), 16),
+                    )
+                }.run { tokenTransactionRepository.saveAll(this) }
 
             // save internal transactions
             transactionTraces
@@ -118,6 +137,7 @@ class SyncService(
         Transaction(
             id = hash,
             block = block,
+            timestamp = block.timestamp,
             contractAddress = transactionReceipt.contractAddress,
             cumulativeGasUsed = transactionReceipt.cumulativeGasUsed,
             from = from,
@@ -148,6 +168,7 @@ class SyncService(
         topics: List<Topic>,
     ): Log =
         Log(
+            timestamp = transaction.timestamp,
             logIndex = logIndex,
             removed = removed,
             transaction = transaction,
@@ -159,6 +180,7 @@ class SyncService(
     fun TransactionTrace.toEntity(transaction: Transaction): InternalTransaction =
         InternalTransaction(
             transaction = transaction,
+            timestamp = transaction.timestamp,
             callType = action.callType,
             from = action.from ?: "0x0000000000000000000000000000000000000000",
             gas = action.gas,

@@ -21,7 +21,7 @@ class SyncJob(
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     override fun executeInternal(context: JobExecutionContext) {
-        val batchSize = 499.toBigInteger()
+        val batchSize = 199.toBigInteger()
         val latestBlockNumber = syncService.latestBlockNumber()
 
         val from = syncService.nextBlockNumber()

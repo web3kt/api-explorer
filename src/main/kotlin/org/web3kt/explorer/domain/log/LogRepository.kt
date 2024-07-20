@@ -1,5 +1,5 @@
 package org.web3kt.explorer.domain.log
 
-import org.springframework.data.jpa.repository.JpaRepository
+import org.web3kt.explorer.domain.QJpaRepository
 
-interface LogRepository : JpaRepository<Log, Long>
+interface LogRepository : QJpaRepository<Log, Long>

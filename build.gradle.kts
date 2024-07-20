@@ -62,7 +62,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 
     // web3Kt
-    implementation("org.web3kt:core:0.1.1")
+    implementation("org.web3kt:core:0.2.1")
 
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")

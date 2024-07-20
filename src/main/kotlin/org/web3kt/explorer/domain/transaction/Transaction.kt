@@ -23,6 +23,7 @@ import java.math.BigInteger
 class Transaction(
     @Id val id: String,
     @ManyToOne(fetch = FetchType.LAZY) val block: Block,
+    val timestamp: Long,
     val contractAddress: String?,
     val cumulativeGasUsed: BigInteger,
     val from: String,
@@ -34,7 +35,6 @@ class Transaction(
     val to: String,
     val transactionIndex: BigInteger,
     val type: String,
-    // val accessList: List<Access>? = null,
     val chainId: BigInteger? = null,
     val gas: BigInteger,
     val gasPrice: BigInteger,

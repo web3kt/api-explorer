@@ -18,9 +18,10 @@ import org.web3kt.explorer.domain.transaction.Transaction
     ],
 )
 class Log(
+    @ManyToOne val transaction: Transaction,
+    val timestamp: Long,
     val logIndex: Integer,
     val removed: Boolean,
-    @ManyToOne val transaction: Transaction,
     val address: String,
     @Column(columnDefinition = "longtext") val data: String,
     @ManyToMany val topics: List<Topic>,

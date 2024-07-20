@@ -5,6 +5,8 @@ import org.web3kt.explorer.domain.log.Log
 import org.web3kt.explorer.web.dto.TopicResponse.Companion.toResponse
 
 data class LogResponse(
+    val transactionId: String,
+    val timestamp: Long,
     val logIndex: Integer,
     val removed: Boolean,
     val address: String,
@@ -14,6 +16,8 @@ data class LogResponse(
     companion object {
         fun Log.toResponse(): LogResponse =
             LogResponse(
+                transactionId = transaction.id,
+                timestamp = timestamp,
                 logIndex = logIndex,
                 removed = removed,
                 address = address,

@@ -11,7 +11,8 @@ import java.math.BigInteger
  */
 data class TransactionDetailResponse(
     val id: String,
-    val block: BlockResponse,
+    val blockId: BigInteger,
+    val timestamp: Long,
     val contractAddress: String?,
     val from: String,
     val to: String?,
@@ -31,7 +32,8 @@ data class TransactionDetailResponse(
         fun Transaction.toDetailResponse() =
             TransactionDetailResponse(
                 id = id,
-                block = block.toResponse(),
+                blockId = block.id,
+                timestamp = timestamp,
                 contractAddress = contractAddress,
                 from = from,
                 to = to,
