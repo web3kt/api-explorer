@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PagedModel
 import org.web3kt.core.Web3
 import org.web3kt.core.protocol.dto.Tag
+import org.web3kt.core.protocol.jsonRpc.JsonRpcException
 import org.web3kt.explorer.domain.QJpaRepository
 
 fun <T> Page<T>.toPagedModel(): PagedModel<T> = PagedModel(this)
@@ -45,6 +46,6 @@ fun <T> JPAQuery<T>.fetchPage(
 suspend fun Web3.isContract(address: String): Boolean =
     try {
         eth.getCode(address, Tag.LATEST) != "0x"
-    } catch (exception: NullPointerException) {
+    } catch (exception: JsonRpcException) {
         true
     }
