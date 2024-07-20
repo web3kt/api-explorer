@@ -3,6 +3,7 @@ package org.web3kt.explorer.service
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PagedModel
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.web3kt.explorer.domain.transaction.QTransaction
 import org.web3kt.explorer.domain.transaction.TransactionRepository
 import org.web3kt.explorer.internal.filter
@@ -15,6 +16,7 @@ import org.web3kt.explorer.web.dto.TransactionResponse.Companion.toResponse
 import java.math.BigInteger
 
 @Service
+@Transactional(readOnly = true)
 class TransactionService(
     private val transactionRepository: TransactionRepository,
 ) {

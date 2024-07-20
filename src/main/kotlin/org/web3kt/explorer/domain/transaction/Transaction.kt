@@ -3,14 +3,22 @@ package org.web3kt.explorer.domain.transaction
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import jakarta.persistence.Index
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
+import jakarta.persistence.Table
 import org.web3kt.explorer.domain.block.Block
 import org.web3kt.explorer.domain.internalTransaction.InternalTransaction
 import org.web3kt.explorer.domain.log.Log
 import java.math.BigInteger
 
 @Entity
+@Table(
+    indexes = [
+        Index(name = "idx_transaction_from", columnList = "from"),
+        Index(name = "idx_transaction_to", columnList = "to"),
+    ],
+)
 class Transaction(
     @Id val id: String,
     @ManyToOne val block: Block,

@@ -3,6 +3,7 @@ package org.web3kt.explorer.service
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PagedModel
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.web3kt.explorer.domain.block.BlockRepository
 import org.web3kt.explorer.internal.toPagedModel
 import org.web3kt.explorer.web.dto.BlockDetailResponse
@@ -12,6 +13,7 @@ import org.web3kt.explorer.web.dto.BlockResponse.Companion.toResponse
 import java.math.BigInteger
 
 @Service
+@Transactional(readOnly = true)
 class BlockService(
     private val blockRepository: BlockRepository,
 ) {
@@ -21,5 +23,6 @@ class BlockService(
             .map { it.toResponse() }
             .toPagedModel()
 
-    fun readOne(number: BigInteger): BlockDetailResponse = blockRepository.findById(number).orElseThrow().toDetailResponse()
+    fun readOne(number: BigInteger): BlockDetailResponse =
+        blockRepository.findById(number).orElseThrow().toDetailResponse()
 }
