@@ -1,3 +1,9 @@
+## 0.0.8 (2024-07-20)
+
+### Fix
+
+- **InternalTransaction**: output columnDefinition = "text"
+
 ## 0.0.7 (2024-07-20)
 
 ### Fix
