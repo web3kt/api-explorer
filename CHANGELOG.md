@@ -1,3 +1,9 @@
+## 0.0.6 (2024-07-20)
+
+### Fix
+
+- **InternalTransaction**: input columnDefinition = "text"
+
 ## 0.0.5 (2024-07-20)
 
 ### Fix
