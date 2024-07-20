@@ -42,4 +42,8 @@ fun <T> JPAQuery<T>.fetchPage(
         PageImpl(this.fetch())
     }
 
-suspend fun Web3.isContract(address: String): Boolean = eth.getCode(address, Tag.LATEST) != "0x"
+suspend fun Web3.isContract(address: String): Boolean = try {
+    eth.getCode(address, Tag.LATEST) != "0x"
+} catch (exception: NullPointerException) {
+    true
+}
