@@ -1,5 +1,6 @@
 package org.web3kt.explorer.domain.internalTransaction
 
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.ManyToOne
 import org.web3kt.explorer.domain.LongEntity
@@ -12,7 +13,7 @@ class InternalTransaction(
     val callType: String?,
     val from: String,
     val gas: BigInteger?,
-    val input: String?,
+    @Column(columnDefinition = "text") val input: String?,
     val to: String,
     val value: BigInteger?,
     val author: String?,
