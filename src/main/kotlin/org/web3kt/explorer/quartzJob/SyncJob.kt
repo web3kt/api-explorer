@@ -24,7 +24,7 @@ class SyncJob(
         val batchSize = 499.toBigInteger()
         val latestBlockNumber = syncService.latestBlockNumber()
 
-        val from = syncService.currentBlockNumber()
+        val from = syncService.nextBlockNumber()
         val to = if (from + batchSize < latestBlockNumber) from + batchSize else latestBlockNumber
 
         if (from > to) return

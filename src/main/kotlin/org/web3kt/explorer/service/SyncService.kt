@@ -28,7 +28,7 @@ class SyncService(
     private val logRepository: LogRepository,
     private val internalTransactionRepository: InternalTransactionRepository,
 ) {
-    fun currentBlockNumber(): BigInteger = (blockRepository.findFirstByOrderByIdDesc()?.id ?: (-1).toBigInteger()) + 1.toBigInteger()
+    fun nextBlockNumber(): BigInteger = (blockRepository.findFirstByOrderByIdDesc()?.id ?: (-1).toBigInteger()) + 1.toBigInteger()
 
     fun latestBlockNumber(): BigInteger = runBlocking { web3.eth.blockNumber() }
 
