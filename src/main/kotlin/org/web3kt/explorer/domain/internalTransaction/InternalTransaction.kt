@@ -27,7 +27,7 @@ class InternalTransaction(
     val author: String?,
     val rewardType: String?,
     val gasUsed: BigInteger?,
-    val output: String?,
+    @Column(columnDefinition = "text") val output: String?,
     val type: String?,
     val subTraces: Int?,
     // val traceAddress: List<Int>,
