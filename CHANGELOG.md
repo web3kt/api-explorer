@@ -1,3 +1,9 @@
+## 0.0.5 (2024-07-20)
+
+### Fix
+
+- Web3.isContract() catch null pointer exception
+
 ## 0.0.4 (2024-07-16)
 
 ### Fix
