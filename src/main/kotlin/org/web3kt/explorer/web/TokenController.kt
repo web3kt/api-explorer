@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.web3kt.explorer.service.TokenService
 import org.web3kt.explorer.service.TokenTransactionService
 import org.web3kt.explorer.web.dto.TokenDetailResponse
+import org.web3kt.explorer.web.dto.TokenResponse
 import org.web3kt.explorer.web.dto.TokenTransactionResponse
 
 @RestController
@@ -18,6 +19,11 @@ class TokenController(
     private val tokenService: TokenService,
     private val tokenTransactionService: TokenTransactionService,
 ) {
+    @GetMapping
+    fun readAll(
+        @ParameterObject pageable: Pageable,
+    ): PagedModel<TokenResponse> = tokenService.readAll(pageable)
+
     @GetMapping("{token}")
     fun readOne(
         @PathVariable token: String,

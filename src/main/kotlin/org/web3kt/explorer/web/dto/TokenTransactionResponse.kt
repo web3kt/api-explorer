@@ -1,11 +1,14 @@
 package org.web3kt.explorer.web.dto
 
 import org.web3kt.explorer.domain.tokenTransaction.TokenTransaction
+import org.web3kt.explorer.web.dto.TokenResponse.Companion.toResponse
+import org.web3kt.explorer.web.dto.TransactionResponse.Companion.toResponse
 import java.math.BigInteger
 
 data class TokenTransactionResponse(
-    val logId: Long?,
+    val transaction: TransactionResponse,
     val timestamp: Long,
+    val token: TokenResponse,
     val from: String,
     val to: String,
     val value: BigInteger?,
@@ -13,8 +16,9 @@ data class TokenTransactionResponse(
     companion object {
         fun TokenTransaction.toResponse(): TokenTransactionResponse =
             TokenTransactionResponse(
-                logId = log.id,
+                transaction = log.transaction.toResponse(),
                 timestamp = timestamp,
+                token = token.toResponse(),
                 from = from,
                 to = to,
                 value = value,

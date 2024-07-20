@@ -12,6 +12,7 @@ import org.web3kt.explorer.domain.internalTransaction.InternalTransaction
 import org.web3kt.explorer.domain.internalTransaction.InternalTransactionRepository
 import org.web3kt.explorer.domain.log.Log
 import org.web3kt.explorer.domain.log.LogRepository
+import org.web3kt.explorer.domain.token.TokenRepository
 import org.web3kt.explorer.domain.tokenTransaction.TokenTransaction
 import org.web3kt.explorer.domain.tokenTransaction.TokenTransactionRepository
 import org.web3kt.explorer.domain.topic.Topic
@@ -30,6 +31,8 @@ class SyncService(
     private val logRepository: LogRepository,
     private val internalTransactionRepository: InternalTransactionRepository,
     private val tokenTransactionRepository: TokenTransactionRepository,
+    private val tokenRepository: TokenRepository,
+    private val tokenService: TokenService,
 ) {
     fun nextBlockNumber(): BigInteger = (blockRepository.findFirstByOrderByIdDesc()?.id ?: (-1).toBigInteger()) + 1.toBigInteger()
 
@@ -76,20 +79,22 @@ class SyncService(
                     .map { topicRepository.findByValue(it) ?: topicRepository.save(Topic(it, null)) }
                     .associateBy { it.value }
 
-            val tokenTransactionLogs =
+            val tokenLogs =
                 logs
                     .map { it.toEntity(transactionMap[it.transactionHash]!!, it.topics.map { topicMap[it]!! }) }
                     .run { logRepository.saveAll(this) }
                     .filter { it.topics.firstOrNull()?.value == "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef" }
 
             // save token transactions
-            tokenTransactionLogs
+            val tokenMap = tokenLogs.associate { it.address to tokenService.findById(it.address) }
+
+            tokenLogs
                 .map {
                     TokenTransaction(
                         id = it.id!!,
                         log = it,
                         timestamp = it.timestamp,
-                        token = it.address,
+                        token = tokenMap[it.address]!!,
                         from = "0x" + it.topics[1].value.takeLast(40),
                         to = "0x" + it.topics[2].value.takeLast(40),
                         value = BigInteger(it.data.removePrefix("0x"), 16),

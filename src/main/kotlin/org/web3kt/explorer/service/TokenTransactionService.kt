@@ -25,7 +25,7 @@ class TokenTransactionService(
         pageable: Pageable,
     ): PagedModel<TokenTransactionResponse> =
         tokenTransactionRepository
-            .findByToken(token, pageable)
+            .findByTokenId(token, pageable)
             .map {
                 it.toResponse()
             }.toPagedModel()

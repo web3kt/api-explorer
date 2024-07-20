@@ -51,7 +51,7 @@ class AddressController(
     ): PagedModel<TokenTransactionResponse> = tokenTransactionService.readAllByAddress(address, pageable)
 
     @GetMapping("{address}/logs")
-    fun readAll(
+    fun readLogsByAddress(
         @PathVariable address: String,
         @ParameterObject pageable: Pageable,
     ): PagedModel<LogResponse> = logService.readAll(address, pageable)
