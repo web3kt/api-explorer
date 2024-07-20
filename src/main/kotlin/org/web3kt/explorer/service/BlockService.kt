@@ -23,6 +23,5 @@ class BlockService(
             .map { it.toResponse() }
             .toPagedModel()
 
-    fun readOne(number: BigInteger): BlockDetailResponse =
-        blockRepository.findById(number).orElseThrow().toDetailResponse()
+    fun readOne(number: BigInteger): BlockDetailResponse = blockRepository.findById(number).orElseThrow().toDetailResponse()
 }

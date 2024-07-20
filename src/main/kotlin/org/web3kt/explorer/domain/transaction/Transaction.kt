@@ -2,6 +2,7 @@ package org.web3kt.explorer.domain.transaction
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.Id
 import jakarta.persistence.Index
 import jakarta.persistence.ManyToOne
@@ -21,7 +22,7 @@ import java.math.BigInteger
 )
 class Transaction(
     @Id val id: String,
-    @ManyToOne val block: Block,
+    @ManyToOne(fetch = FetchType.LAZY) val block: Block,
     val contractAddress: String?,
     val cumulativeGasUsed: BigInteger,
     val from: String,
@@ -37,7 +38,7 @@ class Transaction(
     val chainId: BigInteger? = null,
     val gas: BigInteger,
     val gasPrice: BigInteger,
-    @Column(columnDefinition = "text") val input: String,
+    @Column(columnDefinition = "longtext") val input: String,
     val maxFeePerGas: BigInteger? = null,
     val maxPriorityFeePerGas: BigInteger? = null,
     val nonce: BigInteger,

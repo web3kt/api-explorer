@@ -22,6 +22,6 @@ class Log(
     val removed: Boolean,
     @ManyToOne val transaction: Transaction,
     val address: String,
-    @Column(columnDefinition = "text") val data: String,
+    @Column(columnDefinition = "longtext") val data: String,
     @ManyToMany val topics: List<Topic>,
 ) : LongEntity()
