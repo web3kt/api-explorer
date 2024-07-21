@@ -1,3 +1,9 @@
+## 0.1.5 (2024-07-21)
+
+### Fix
+
+- **SyncService**: token transaction
+
 ## 0.1.4 (2024-07-21)
 
 ### Fix

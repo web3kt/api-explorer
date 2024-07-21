@@ -1,7 +1,7 @@
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 group = "org.web3kt"
-version = "0.1.4"
+version = "0.1.5"
 
 plugins {
     id("org.springframework.boot") version "3.3.1"
