@@ -1,3 +1,9 @@
+## 0.1.4 (2024-07-21)
+
+### Fix
+
+- **Token**: token parameter nullable
+
 ## 0.1.3 (2024-07-21)
 
 ### Fix
