@@ -12,6 +12,7 @@ import org.web3kt.explorer.domain.internalTransaction.InternalTransaction
 import org.web3kt.explorer.domain.internalTransaction.InternalTransactionRepository
 import org.web3kt.explorer.domain.log.Log
 import org.web3kt.explorer.domain.log.LogRepository
+import org.web3kt.explorer.domain.token.Token
 import org.web3kt.explorer.domain.tokenTransaction.TokenTransaction
 import org.web3kt.explorer.domain.tokenTransaction.TokenTransactionRepository
 import org.web3kt.explorer.domain.topic.Topic
@@ -87,17 +88,8 @@ class SyncService(
             val tokenMap = tokenLogs.associate { it.address to tokenService.findById(it.address) }
 
             tokenLogs
-                .map {
-                    TokenTransaction(
-                        id = it.id!!,
-                        log = it,
-                        timestamp = it.timestamp,
-                        token = tokenMap[it.address]!!,
-                        from = "0x" + it.topics[1].value.takeLast(40),
-                        to = "0x" + it.topics[2].value.takeLast(40),
-                        value = BigInteger(it.data.removePrefix("0x"), 16),
-                    )
-                }.run { tokenTransactionRepository.saveAll(this) }
+                .mapNotNull { it.toTokenTransaction(tokenMap) }
+                .run { tokenTransactionRepository.saveAll(this) }
 
             // save internal transactions
             transactionTraces
@@ -197,4 +189,19 @@ class SyncService(
             type = type,
             subTraces = subtraces,
         )
+
+    fun Log.toTokenTransaction(tokenMap: Map<String, Token>): TokenTransaction? =
+        try {
+            TokenTransaction(
+                id = id!!,
+                log = this,
+                timestamp = timestamp,
+                token = tokenMap[address]!!,
+                from = "0x" + topics[1].value.takeLast(40),
+                to = "0x" + topics[2].value.takeLast(40),
+                value = BigInteger(data.removePrefix("0x"), 16),
+            )
+        } catch (e: Exception) {
+            null
+        }
 }
