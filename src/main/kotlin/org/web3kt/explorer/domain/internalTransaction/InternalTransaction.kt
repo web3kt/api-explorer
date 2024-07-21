@@ -12,8 +12,9 @@ import java.math.BigInteger
 @Entity
 @Table(
     indexes = [
-        Index(name = "idx_internaltransaction_from", columnList = "from"),
-        Index(name = "idx_internaltransaction_to", columnList = "to"),
+        Index(name = "idx_internalTransaction_from", columnList = "from"),
+        Index(name = "idx_internalTransaction_to", columnList = "to"),
+        Index(name = "idx_internalTransaction_timestamp", columnList = "timestamp"),
     ],
 )
 class InternalTransaction(

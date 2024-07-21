@@ -48,6 +48,6 @@ class SyncJob(
             .newTrigger()
             .forJob(syncJobDetail)
             .withIdentity(this::class.simpleName)
-            .withSchedule(CronScheduleBuilder.cronSchedule("*/1 * * * * ?"))
+            .withSchedule(CronScheduleBuilder.cronSchedule("*/15 * * * * ?"))
             .build()
 }

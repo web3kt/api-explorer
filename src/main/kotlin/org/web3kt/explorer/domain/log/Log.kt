@@ -15,6 +15,7 @@ import org.web3kt.explorer.domain.transaction.Transaction
 @Table(
     indexes = [
         Index(name = "idx_log_address", columnList = "address"),
+        Index(name = "idx_log_timestamp", columnList = "timestamp"),
     ],
 )
 class Log(

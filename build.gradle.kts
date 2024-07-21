@@ -64,6 +64,8 @@ dependencies {
     // web3Kt
     implementation("org.web3kt:core:0.2.1")
 
+    implementation("p6spy:p6spy:3.9.1")
+
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

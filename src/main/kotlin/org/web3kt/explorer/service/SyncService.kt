@@ -12,7 +12,6 @@ import org.web3kt.explorer.domain.internalTransaction.InternalTransaction
 import org.web3kt.explorer.domain.internalTransaction.InternalTransactionRepository
 import org.web3kt.explorer.domain.log.Log
 import org.web3kt.explorer.domain.log.LogRepository
-import org.web3kt.explorer.domain.token.TokenRepository
 import org.web3kt.explorer.domain.tokenTransaction.TokenTransaction
 import org.web3kt.explorer.domain.tokenTransaction.TokenTransactionRepository
 import org.web3kt.explorer.domain.topic.Topic
@@ -31,7 +30,6 @@ class SyncService(
     private val logRepository: LogRepository,
     private val internalTransactionRepository: InternalTransactionRepository,
     private val tokenTransactionRepository: TokenTransactionRepository,
-    private val tokenRepository: TokenRepository,
     private val tokenService: TokenService,
 ) {
     fun nextBlockNumber(): BigInteger = (blockRepository.findFirstByOrderByIdDesc()?.id ?: (-1).toBigInteger()) + 1.toBigInteger()

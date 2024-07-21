@@ -15,6 +15,7 @@ import java.math.BigInteger
     indexes = [
         Index(name = "idx_tokenTransaction_from", columnList = "from"),
         Index(name = "idx_tokenTransaction_to", columnList = "to"),
+        Index(name = "idx_tokenTransaction_timestamp", columnList = "timestamp"),
     ],
 )
 class TokenTransaction(

@@ -3,9 +3,16 @@ package org.web3kt.explorer.domain.block
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import jakarta.persistence.Index
+import jakarta.persistence.Table
 import java.math.BigInteger
 
 @Entity
+@Table(
+    indexes = [
+        Index(name = "idx_block_timestamp", columnList = "timestamp"),
+    ],
+)
 class Block(
     @Id val id: BigInteger,
     val baseFeePerGas: BigInteger?,
