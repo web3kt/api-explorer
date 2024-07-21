@@ -4,8 +4,8 @@ import java.math.BigInteger
 
 data class TokenDetailResponse(
     val id: String,
-    val name: String,
-    val symbol: String,
-    val decimals: Int,
-    val totalSupply: BigInteger,
+    val name: String?,
+    val symbol: String?,
+    val decimals: Int?,
+    val totalSupply: BigInteger?,
 )

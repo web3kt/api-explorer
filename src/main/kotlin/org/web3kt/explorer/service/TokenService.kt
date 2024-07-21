@@ -18,6 +18,7 @@ import org.web3kt.explorer.internal.toPagedModel
 import org.web3kt.explorer.web.dto.TokenDetailResponse
 import org.web3kt.explorer.web.dto.TokenResponse
 import org.web3kt.explorer.web.dto.TokenResponse.Companion.toResponse
+import java.math.BigInteger
 
 @OptIn(ExperimentalStdlibApi::class)
 @Service
@@ -26,21 +27,39 @@ class TokenService(
     private val tokenRepository: TokenRepository,
 ) {
     fun readOne(token: String): TokenDetailResponse =
-        TokenDetailResponse(
-            id = token,
-            name = TypeDecoder.decode(call(token, SELECTOR_NAME).drop(32).toByteArray(), StringType::class).value,
-            symbol = TypeDecoder.decode(call(token, SELECTOR_SYMBOL).drop(32).toByteArray(), StringType::class).value,
-            decimals = TypeDecoder.decode(call(token, SELECTOR_DECIMALS), Uint8Type::class).value.toInt(),
-            totalSupply = TypeDecoder.decode(call(token, SELECTOR_TOTAL_SUPPLY), Uint256Type::class).value,
-        )
+        TokenDetailResponse(token, getName(token), getSymbol(token), getDecimals(token), getTotalSupply(token))
 
     fun findById(token: String): Token =
-        tokenRepository.findByIdOrNull(token) ?: Token(
-            id = token,
-            name = TypeDecoder.decode(call(token, SELECTOR_NAME).drop(32).toByteArray(), StringType::class).value,
-            symbol = TypeDecoder.decode(call(token, SELECTOR_SYMBOL).drop(32).toByteArray(), StringType::class).value,
-            decimals = TypeDecoder.decode(call(token, SELECTOR_DECIMALS), Uint8Type::class).value.toInt(),
-        ).run { tokenRepository.save(this) }
+        tokenRepository.findByIdOrNull(token)
+            ?: tokenRepository.save(Token(token, getName(token), getSymbol(token), getDecimals(token)))
+
+    private fun getName(token: String): String? =
+        try {
+            TypeDecoder.decode(call(token, SELECTOR_NAME).drop(32).toByteArray(), StringType::class).value
+        } catch (e: Exception) {
+            null
+        }
+
+    private fun getSymbol(token: String): String? =
+        try {
+            TypeDecoder.decode(call(token, SELECTOR_SYMBOL).drop(32).toByteArray(), StringType::class).value
+        } catch (e: Exception) {
+            null
+        }
+
+    private fun getDecimals(token: String): Int? =
+        try {
+            TypeDecoder.decode(call(token, SELECTOR_DECIMALS), Uint8Type::class).value.toInt()
+        } catch (e: Exception) {
+            null
+        }
+
+    private fun getTotalSupply(token: String): BigInteger? =
+        try {
+            TypeDecoder.decode(call(token, SELECTOR_TOTAL_SUPPLY), Uint256Type::class).value
+        } catch (e: Exception) {
+            null
+        }
 
     private fun call(
         token: String,
