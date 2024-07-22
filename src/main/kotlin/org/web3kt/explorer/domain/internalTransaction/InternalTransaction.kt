@@ -25,7 +25,7 @@ class InternalTransaction(
     val gas: BigInteger?,
     @Column(columnDefinition = "longtext") val input: String?,
     val to: String,
-    val value: BigInteger?,
+    @Column(precision = 65) val value: BigInteger?,
     val author: String?,
     val rewardType: String?,
     val gasUsed: BigInteger?,

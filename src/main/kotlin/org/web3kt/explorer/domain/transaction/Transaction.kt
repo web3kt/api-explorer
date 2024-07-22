@@ -46,7 +46,7 @@ class Transaction(
     val r: String,
     val s: String,
     val v: String,
-    val value: BigInteger,
+    @Column(precision = 65) val value: BigInteger,
     val yParity: String? = null,
 ) {
     @OneToMany(mappedBy = "transaction")

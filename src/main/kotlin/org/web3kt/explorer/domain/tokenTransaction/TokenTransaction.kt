@@ -1,5 +1,6 @@
 package org.web3kt.explorer.domain.tokenTransaction
 
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Index
@@ -25,5 +26,5 @@ class TokenTransaction(
     @ManyToOne val token: Token,
     val from: String,
     val to: String,
-    val value: BigInteger,
+    @Column(precision = 65) val value: BigInteger,
 )
