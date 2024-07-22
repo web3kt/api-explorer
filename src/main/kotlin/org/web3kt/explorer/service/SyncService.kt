@@ -40,24 +40,15 @@ class SyncService(
     fun latestBlockNumber(): BigInteger = runBlocking { web3.eth.blockNumber() }
 
     @Transactional
-    fun sync(
-        from: BigInteger,
-        to: BigInteger,
-    ): Unit =
+    fun sync(blockNumber: BigInteger): Unit =
         runBlocking {
-            // retrieve blocks, transaction receipts, and transaction traces
-            val blocks =
-                (from.toLong()..to.toLong()).map { web3.eth.getBlock<org.web3kt.core.protocol.dto.Transaction>(it.toBigInteger()) }
-            val transactionReceipts = blocks.flatMap { web3.eth.getBlockReceipts(it.number) }
-            val transactionTraces =
-                blocks.mapNotNull { if (it.transactions.isEmpty()) null else web3.trace.block(it.number) }.flatten()
+            // retrieve block, transaction receipts, and transaction traces
+            val block = web3.eth.getBlock<org.web3kt.core.protocol.dto.Transaction>(blockNumber)
+            val transactionReceipts = web3.eth.getBlockReceipts(blockNumber)
+            val transactionTraces = web3.trace.block(blockNumber)
 
-            // save block and generate block map
-            val blockMap =
-                blocks
-                    .map { it.toEntity() }
-                    .run { blockRepository.saveAll(this) }
-                    .associateBy { it.id }
+            // save block
+            val blockEntity = blockRepository.save(block.toEntity())
 
             // generate transaction receipt map and save transactions
             val transactionReceiptMap =
@@ -65,9 +56,8 @@ class SyncService(
                     .associateBy { it.transactionHash }
 
             val transactionMap =
-                blocks
-                    .flatMap { it.transactions }
-                    .map { it.toEntity(transactionReceiptMap[it.hash]!!, blockMap[it.blockNumber]!!) }
+                block.transactions
+                    .map { it.toEntity(transactionReceiptMap[it.hash]!!, blockEntity) }
                     .run { transactionRepository.saveAll(this) }
                     .associateBy { it.id }
 

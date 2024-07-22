@@ -21,37 +21,20 @@ class SyncJob(
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     override fun executeInternal(context: JobExecutionContext) {
-        val batchSize = 200.toBigInteger()
-
         val latestBlockNumber = syncService.latestBlockNumber()
-        val maxBlockNumber = syncService.maxBlockNumber() ?: (-1).toBigInteger()
+        val maxBlockNumber = syncService.maxBlockNumber()
         val minBlockNumber = syncService.minBlockNumber()
 
-        val (from, to) =
-            if (latestBlockNumber > maxBlockNumber) {
-                val to = latestBlockNumber
-                val from =
-                    if (latestBlockNumber - batchSize > maxBlockNumber + 1.toBigInteger()) {
-                        latestBlockNumber - batchSize
-                    } else {
-                        maxBlockNumber + 1.toBigInteger()
-                    }
-                from to to
-            } else if (minBlockNumber != null && minBlockNumber > 0.toBigInteger()) {
-                val to = minBlockNumber - 1.toBigInteger()
-                val from =
-                    if (to - batchSize > 0.toBigInteger()) {
-                        to - batchSize
-                    } else {
-                        0.toBigInteger()
-                    }
-                from to to
-            } else {
-                return
-            }
+        val blockNumber = if (maxBlockNumber == null) {
+            latestBlockNumber
+        } else if (latestBlockNumber > maxBlockNumber) {
+            maxBlockNumber + 1.toBigInteger()
+        } else if (minBlockNumber != null && minBlockNumber > 0.toBigInteger()) {
+            minBlockNumber - 1.toBigInteger()
+        } else return
 
-        syncService.sync(from, to)
-        logger.info("[$from ~ $to] synced")
+        syncService.sync(blockNumber)
+        logger.info("#$blockNumber synced")
     }
 
     @Bean
