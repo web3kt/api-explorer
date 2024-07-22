@@ -1,3 +1,10 @@
+## 0.1.6 (2024-07-22)
+
+### Fix
+
+- add precision for value
+- **SyncJob**: update schedule
+
 ## 0.1.5 (2024-07-21)
 
 ### Fix
