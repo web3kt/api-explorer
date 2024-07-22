@@ -4,5 +4,7 @@ import org.web3kt.explorer.domain.QJpaRepository
 import java.math.BigInteger
 
 interface BlockRepository : QJpaRepository<Block, BigInteger> {
+    fun findFirstByOrderById(): Block?
+
     fun findFirstByOrderByIdDesc(): Block?
 }

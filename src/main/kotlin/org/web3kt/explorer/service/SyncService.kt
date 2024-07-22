@@ -33,7 +33,9 @@ class SyncService(
     private val tokenTransactionRepository: TokenTransactionRepository,
     private val tokenService: TokenService,
 ) {
-    fun nextBlockNumber(): BigInteger = (blockRepository.findFirstByOrderByIdDesc()?.id ?: (-1).toBigInteger()) + 1.toBigInteger()
+    fun minBlockNumber(): BigInteger? = blockRepository.findFirstByOrderById()?.id
+
+    fun maxBlockNumber(): BigInteger? = blockRepository.findFirstByOrderByIdDesc()?.id
 
     fun latestBlockNumber(): BigInteger = runBlocking { web3.eth.blockNumber() }
 
